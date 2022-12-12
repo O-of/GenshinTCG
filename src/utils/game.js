@@ -68,8 +68,9 @@ class GameBoard {
         }
       } else {
         currentTurn = 1 - currentTurn;
+
         let p = this.players[currentTurn];
-        p.drawCard(2);
+        if (p.ended) continue;
 
         while (true) {
           console.log(
@@ -126,6 +127,7 @@ class GameBoard {
               startingPlayer = currentTurn;
             }
             p.endAttackPhase();
+            p.drawCard(2);
             break;
           } else {
             console.log("Please try again");
@@ -252,27 +254,7 @@ class Player {
   // Use action card
   useActionCard(index) {}
 
-  getCharacterStr() {
-    return `${this.primaryCards
-      .map(
-        (c, i) =>
-          `${i === this.activeCharacterIndex ? "\x1b[1m" : ""}(${
-            i + 1
-          }) ${c.toString()}\x1b[0m`
-      )
-      .join("\n")}`;
-  }
-
-  getActionCardsStr() {
-    return `${this.actionCards
-      .map((card, i) => `(${i + 1}) ${card.cardInfo.name}`)
-      .join(", ")}`;
-  }
-
-  getDiceStr() {
-    return `${this.dice.map((d, i) => `(${i + 1}) ${d}`).join(", ")}`;
-  }
-
+  // Validation functions
   validToSwitch(characterIndex) {
     return (
       this.primaryCards[characterIndex - 1]?.hp > 0 &&
@@ -308,6 +290,28 @@ class Player {
 
   validToSacrifice(cardIndex) {
     return 0 < cardIndex && cardIndex <= this.actionCards.length;
+  }
+
+  // String functions
+  getCharacterStr() {
+    return `${this.primaryCards
+    .map(
+      (c, i) =>
+        `${i === this.activeCharacterIndex ? "\x1b[1m" : ""}(${
+          i + 1
+        }) ${c.toString()}\x1b[0m`
+    )
+    .join("\n")}`;
+  }
+
+  getActionCardsStr() {
+    return `${this.actionCards
+    .map((card, i) => `(${i + 1}) ${card.cardInfo.name}`)
+    .join(", ")}`;
+  }
+
+  getDiceStr() {
+    return `${this.dice.map((d, i) => `(${i + 1}) ${d}`).join(", ")}`;
   }
 }
 
