@@ -12,8 +12,6 @@ class GameBoard {
       new Player(this, 0, player1.primaryCards, player1.cardDeck),
       new Player(this, 1, player2.primaryCards, player2.cardDeck),
     ];
-    this.startingPlayer = 0;
-    this.turnNumber = 0;
   }
 
   run() {
@@ -22,14 +20,43 @@ class GameBoard {
       p.drawCard(STARTING_ACTION_AMOUNT);
 
       console.log(`Player ${p.playerNumber}: ${p.getActionCardsStr()}`);
-      let toRedraw = prompt("Which cards to redraw: ")
+      let toRedraw = prompt("Enter cards to redraw: ")
         .split(",")
-        .map(parseInt)
+        .map((x) => parseInt(x))
         .filter((x) => x);
-      console.log(`Redrawing ${toRedraw.join(",")}`);
+      console.log(`Redrawing: ${toRedraw.join(",") || "None"}`);
 
       p.redrawCard(toRedraw);
-      console.log(`Player ${p.playerNumber}: ${p.getActionCardsStr()}`);
+      console.log(`Player ${p.playerNumber}: ${p.getActionCardsStr()}\n`);
+    }
+
+    let startingPlayer = 0;
+    let turnNumber = 0;
+
+    let currentTurn = 1 - startingPlayer;
+    while (!this.players[0].lose && !this.players[1].lose) {
+      if (this.players[0].ended && this.players[1].ended) {
+        turnNumber++;
+        console.log(`---------- TURN ${turnNumber} ----------`);
+
+        for (let p of this.players) {
+          p.startRollPhase();
+          p.rollDice();
+
+          console.log(`Player ${p.playerNumber}: ${p.getDiceStr()}`);
+          let toReroll = prompt("Enter dice to reroll: ")
+            .split(",")
+            .map((x) => parseInt(x))
+            .filter((x) => x);
+
+          console.log(`Rerolling: ${toReroll.join(",") || "None"}`);
+          console.log(`Player ${p.playerNumber}: ${p.getDiceStr()}\n`);
+
+          p.rerollDice(toReroll);
+        }
+      } else {
+        currentTurn = 1 - currentTurn;
+      }
     }
   }
 }
@@ -49,15 +76,20 @@ class Player {
     this.dice = []; // Dice they roll every turn
     this.actionCards = []; // Action cards in hand
 
-    this.ended = false; // If turn was ended or not
+    this.ended = true; // If turn was ended or not
     this.limits = {}; // limits per turn - resets every turn
+
+    this.lose = false;
   }
 
   rollDice() {
     for (let i = 0; i < MAX_DICE; i++) {
       this.dice.push(util.rollDice());
     }
-    this.dice.sort();
+
+    this.dice.sort((a, b) => {
+      return util.rollDiceCompare(a) - util.rollDiceCompare(b);
+    });
   }
 
   rerollDice(toReroll) {
@@ -69,7 +101,9 @@ class Player {
       this.dice.push(util.rollDice());
     }
 
-    this.dice.sort();
+    this.dice.sort((a, b) => {
+      return util.rollDiceCompare(a) - util.rollDiceCompare(b);
+    });
   }
 
   drawCard(amount) {
@@ -135,7 +169,13 @@ class Player {
 
   getActionCardsStr() {
     return `Your Action cards are ${this.actionCards
-      .map((card, i) => "(" + (i + 1) + ") " + card.cardInfo.name)
+      .map((card, i) => `(${i + 1}) ${card.cardInfo.name}`)
+      .join(", ")}`;
+  }
+
+  getDiceStr() {
+    return `Your Dice are ${this.dice
+      .map((d, i) => `(${i + 1}) ${d}`)
       .join(", ")}`;
   }
 }
