@@ -88,6 +88,21 @@ class GameBoard {
           if (action === 1) {
           } else if (action === 2) {
           } else if (action === 3) {
+            console.log(`Enter dice to tune: ${p.getDiceStr()}`);
+            let dIndex = parseInt(prompt("> "));
+            if (!p.validToTune(dIndex)) {
+              console.log("Try again.");
+              continue;
+            }
+
+            console.log(`Enter card to sacrifice: ${p.getActionCardsStr()}`);
+            let cIndex = parseInt(prompt("> "));
+
+            if (p.validToSacrifice(cIndex)) {
+              p.tuneDice(dIndex, cIndex);
+            } else {
+              console.log("Try again.");
+            }
           } else if (action === 4) {
             console.log(`Enter character to switch to\n${p.getCharacterStr()}`);
             let cIndex = parseInt(prompt("> "));
@@ -106,7 +121,7 @@ class GameBoard {
               console.log("Try again.");
             }
           } else if (action === 5) {
-            console.log(this.players[1 - currentTurn].ended)
+            console.log(this.players[1 - currentTurn].ended);
             if (!this.players[1 - currentTurn].ended) {
               startingPlayer = currentTurn;
             }
@@ -129,7 +144,7 @@ class Player {
     this.playerNumber = playerNumber;
 
     this.primaryCards = primaryCards.map(createCharacter); // Primary characters who are doing things
-    this.activeCharacter = 0;
+    this.activeCharacterIndex = 0;
     this.cardDeck = util.shuffle(cardDeck.slice()); // Action card deck
     this.trashPile = []; // Trash pile so we can reuse!
 
@@ -142,14 +157,22 @@ class Player {
     this.lose = false;
   }
 
+  get activeCharacter() {
+    return this.primaryCards[this.activeCharacterIndex];
+  }
+
+  sortDice() {
+    this.dice.sort((a, b) => {
+      return util.rollDiceCompare(a) - util.rollDiceCompare(b);
+    });
+  }
+
   rollDice() {
     for (let i = 0; i < MAX_DICE; i++) {
       this.dice.push(util.rollDice());
     }
 
-    this.dice.sort((a, b) => {
-      return util.rollDiceCompare(a) - util.rollDiceCompare(b);
-    });
+    this.sortDice();
   }
 
   rerollDice(toReroll) {
@@ -161,9 +184,7 @@ class Player {
       this.dice.push(util.rollDice());
     }
 
-    this.dice.sort((a, b) => {
-      return util.rollDiceCompare(a) - util.rollDiceCompare(b);
-    });
+    this.sortDice();
   }
 
   drawCard(amount) {
@@ -180,16 +201,20 @@ class Player {
     }
   }
 
+  discardCard(cardIndex) {
+    this.trashPile.push(
+      ...this.actionCards.splice(cardIndex - 1, 1).map((x) => {
+        x.id;
+      })
+    );
+  }
+
   redrawCard(toRedraw) {
     for (let i of toRedraw
       .filter((x) => 0 < x && x <= STARTING_ACTION_AMOUNT)
       .sort()
       .reverse()) {
-      this.trashPile.push(
-        ...this.actionCards.splice(i - 1, 1).map((x) => {
-          x.id;
-        })
-      );
+      this.discardCard(i);
       this.drawCard(1);
     }
   }
@@ -231,7 +256,7 @@ class Player {
     return `${this.primaryCards
       .map(
         (c, i) =>
-          `${i === this.activeCharacter ? "\x1b[1m" : ""}(${
+          `${i === this.activeCharacterIndex ? "\x1b[1m" : ""}(${
             i + 1
           }) ${c.toString()}\x1b[0m`
       )
@@ -251,15 +276,38 @@ class Player {
   validToSwitch(characterIndex) {
     return (
       this.primaryCards[characterIndex - 1]?.hp > 0 &&
-      characterIndex !== this.activeCharacter
+      characterIndex !== this.activeCharacterIndex
     );
   }
 
   switchCharacter(characterIndex, diceIndex) {
-    if (this.validToSwitch(characterIndex) && 0 < diceIndex && diceIndex <= this.dice.length) {
-      this.activeCharacter = characterIndex - 1;
+    if (
+      this.validToSwitch(characterIndex) &&
+      0 < diceIndex &&
+      diceIndex <= this.dice.length
+    ) {
+      this.activeCharacterIndex = characterIndex - 1;
       this.dice.splice(diceIndex - 1, 1);
     }
+  }
+
+  validToTune(diceIndex) {
+    return (
+      this.dice[diceIndex - 1] !== "any" &&
+      this.dice[diceIndex - 1] !== this.activeCharacter.characterData.element
+    );
+  }
+
+  tuneDice(diceIndex, cardIndex) {
+    if (this.validToTune(diceIndex) && this.validToSacrifice(cardIndex)) {
+      this.dice[diceIndex - 1] = this.activeCharacter.characterData.element;
+      this.discardCard(cardIndex);
+      this.sortDice();
+    }
+  }
+
+  validToSacrifice(cardIndex) {
+    return 0 < cardIndex && cardIndex <= this.actionCards.length;
   }
 }
 
