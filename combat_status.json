@@ -1,0 +1,28 @@
+{
+  "icicle": {
+    "name": "icicle",
+    "max_health": 3,
+    "events": {
+      "switch_character": [
+        {
+          "type": "damage",
+          "amount": {
+            "cryo": 2
+          }
+        }
+      ]
+    }
+  },
+  "ice_lotus": {
+    "name": "Ice Lotus",
+    "max_health": 2,
+    "events": {
+      "damage_taken": [
+        {
+          "type": "damage_reduction",
+          "amount": 1
+        }
+      ]
+    }
+  }
+}

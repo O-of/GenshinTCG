@@ -1,0 +1,224 @@
+{
+  "Diluc": {
+    "moves": {
+      "Tempered Sword": {
+        "damage": {
+          "physical": 2
+        },
+        "cost": {
+          "element": 1,
+          "misc": 2
+        },
+        "effects": [],
+        "energy": 0,
+        "type": "normal_attack"
+      },
+      "Searing Onslaught": {
+        "damage": {
+          "element": 3
+        },
+        "cost": {
+          "element": 3
+        },
+        "effects": [],
+        "energy": 0,
+        "type": "elemental_skill"
+      },
+      "Dawn": {
+        "damage": {
+          "element": 8
+        },
+        "cost": {
+          "element": 4
+        },
+        "energy": 3,
+        "effects": [
+          {
+            "type": "infusion",
+            "element": "pyro"
+          }
+        ],
+        "type": "burst"
+      }
+    },
+    "passive": null,
+    "element": "pyro",
+    "weapon_type": "claymore",
+    "max_energy": 3
+  },
+  "Kaeya": {
+    "moves": {
+      "Ceremonial Bladework": {
+        "damage": {
+          "physical": 2
+        },
+        "cost": {
+          "element": 1,
+          "misc": 2
+        },
+        "effects": [],
+        "energy": 0,
+        "type": "normal_attack"
+      },
+      "Frostgnaw": {
+        "damage": {
+          "element": 3
+        },
+        "cost": {
+          "element": 3
+        },
+        "effects": [],
+        "energy": 0,
+        "type": "elemental_skill"
+      },
+      "Glacial Waltz": {
+        "damage": {
+          "element": 1
+        },
+        "cost": {
+          "element": 4
+        },
+        "energy": 2,
+        "effects": [
+          {
+            "type": "combat_status",
+            "status_type": "icicle"
+          }
+        ],
+        "type": "burst"
+      }
+    },
+    "passive": null,
+    "element": "cryo",
+    "weapon_type": "sword",
+    "max_energy": 2
+  },
+  "Sucrose": {
+    "moves": {
+      "Wind Spirit Creation": {
+        "damage": {
+          "element": 1
+        },
+        "cost": {
+          "element": 1,
+          "misc": 2
+        },
+        "effects": [],
+        "energy": 0,
+        "type": "normal_attack"
+      },
+      "Astable Anemohypostasis Creation - 6308": {
+        "damage": {
+          "element": 3
+        },
+        "cost": {
+          "element": 3
+        },
+        "effects": [
+          {
+            "type": "target_switch",
+            "to": "previous"
+          }
+        ],
+        "energy": 0,
+        "type": "elemental_skill"
+      },
+      "Forbidden Creation - Isomer 75 / Type II": {
+        "damage": {
+          "element": 1
+        },
+        "cost": {
+          "element": 3
+        },
+        "energy": 2,
+        "effects": [
+          {
+            "type": "summon",
+            "summon_type": "large_wind_spirit"
+          }
+        ],
+        "type": "burst"
+      }
+    },
+    "passive": null,
+    "element": "anemo",
+    "weapon_type": "catalyst",
+    "max_energy": 2
+  },
+  "Ganyu": {
+    "moves": {
+      "Liutian Archery": {
+        "damage": {
+          "physical": 2
+        },
+        "cost": {
+          "element": 1,
+          "misc": 2
+        },
+        "effects": [],
+        "energy": 0,
+        "type": "normal_attack"
+      },
+      "Frostflake Arrow": {
+        "damage": {
+          "element": 2
+        },
+        "cost": {
+          "element": 5
+        },
+        "effects": [
+          {
+            "type": "piercing_damage",
+            "amount": {
+              "true": 2
+            }
+          }
+        ],
+        "energy": 0,
+        "type": "normal_attack"
+      },
+      "Trail of the Qilin": {
+        "damage": {
+          "element": 1
+        },
+        "cost": {
+          "element": 3
+        },
+        "effects": [
+          {
+            "type": "combat_status",
+            "status_type": "ice_lotus"
+          }
+        ],
+        "energy": 0,
+        "type": "elemental_skill"
+      },
+      "Celestial Shower": {
+        "damage": {
+          "element": 3
+        },
+        "cost": {
+          "element": 3
+        },
+        "energy": 2,
+        "effects": [
+          {
+            "type": "piercing_damage",
+            "amount": {
+              "true": 1
+            }
+          },
+          {
+            "type": "summon",
+            "summon_type": "sacred_cryo_pearl"
+          }
+        ],
+        "type": "burst"
+      }
+    },
+    "passive": null,
+    "element": "cryo",
+    "weapon_type": "bow",
+    "max_energy": 2
+  }
+}

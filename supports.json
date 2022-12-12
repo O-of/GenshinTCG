@@ -1,0 +1,221 @@
+{
+  "magic_guide": {
+    "name": "Magic Guide",
+    "cost": {
+      "same": 2
+    },
+    "type": [
+      "equipment",
+      "weapon"
+    ],
+    "weapon_type": "catalyst",
+    "damage_increase": 1,
+    "requirements": []
+  },
+  "sacrificial_bow": {
+    "name": "Sacrificial Bow",
+    "cost": {
+      "same": 3
+    },
+    "type": [
+      "equipment",
+      "weapon"
+    ],
+    "weapon_type": "bow",
+    "events": {
+      "on_elemental_skill": [
+        {
+          "effects": [
+            {
+              "type": "create_die",
+              "element": "element"
+            }
+          ],
+          "limits": {
+            "per_round": 1
+          }
+        }
+      ]
+    },
+    "damage_increase": 1,
+    "requirements": []
+  },
+  "white_iron_greatsword": {
+    "name": "White Iron Greatsword",
+    "cost": {
+      "same": 2
+    },
+    "type": [
+      "equipment",
+      "weapon"
+    ],
+    "weapon_type": "claymore",
+    "damage_increase": 1,
+    "requirements": []
+  },
+  "travelers_handy_sword": {
+    "name": "Traveler's Handy Sword",
+    "cost": {
+      "same": 2
+    },
+    "type": [
+      "equipment",
+      "weapon"
+    ],
+    "weapon_type": "claymore",
+    "damage_increase": 1,
+    "requirements": []
+  },
+  "lucky_dog": {
+    "name": "Lucky Dog's Silver Circlet",
+    "cost": {
+      "any": 2
+    },
+    "type": [
+      "equipment",
+      "artifact"
+    ],
+    "events": {
+      "on_elemental_skill": [
+        {
+          "effects": [
+            {
+              "type": "heal",
+              "amount": 2
+            }
+          ],
+          "limits": {
+            "per_round": 1
+          }
+        }
+      ]
+    },
+    "requirements": []
+  },
+  "dawn_winery": {
+    "name": "Dawn Winery",
+    "cost": {
+      "same": 2
+    },
+    "type": [
+      "support",
+      "location"
+    ],
+    "events": {
+      "switch_character": [
+        {
+          "effects": [
+            {
+              "type": "decrease_cost",
+              "amount": 1
+            }
+          ],
+          "limits": {
+            "per_round": 1
+          }
+        }
+      ]
+    },
+    "requirements": []
+  },
+  "paimon": {
+    "name": "Paimon",
+    "cost": {
+      "same": 3
+    },
+    "type": [
+      "support",
+      "companion"
+    ],
+    "events": {
+      "action_start": [
+        {
+          "effects": [
+            {
+              "type": "create_die",
+              "element": "omni"
+            },
+            {
+              "type": "create_die",
+              "element": "omni"
+            }
+          ],
+          "limits": {
+            "per_round": 1,
+            "max_rounds": 2
+          }
+        }
+      ]
+    },
+    "requirements": []
+  },
+  "changing_shifts": {
+    "name": "Changing Shifts",
+    "cost": {},
+    "type": [
+      "event"
+    ],
+    "event": {
+      "switch_character": [
+        {
+          "effects": [
+            {
+              "type": "decrease_cost",
+              "amount": 1
+            }
+          ],
+          "limits": {
+            "actions": 1
+          }
+        }
+      ]
+    },
+    "requirements": []
+  },
+  "leave_it_to_me": {
+    "name": "Leave It to Me!",
+    "cost": {},
+    "type": [
+      "event"
+    ],
+    "events": {
+      "switch_character": [
+        {
+          "effects": [
+            {
+              "type": "fast_action"
+            }
+          ],
+          "limits": {
+            "actions": 1
+          }
+        }
+      ]
+    },
+    "requirements": []
+  },
+  "sweet_madame": {
+    "name": "Sweet Maadame",
+    "cost": {},
+    "type": [
+      "event",
+      "food"
+    ],
+    "events": {
+      "play_card": [
+        {
+          "effects": [
+            {
+              "type": "heal",
+              "amount": 1
+            }
+          ],
+          "limits": {
+            "actions": 1
+          }
+        }
+      ]
+    },
+    "requirements": []
+  }
+}

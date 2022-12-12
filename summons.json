@@ -1,0 +1,48 @@
+{
+  "large_wind_spirit": {
+    "name": "Large Wind Spirit",
+    "max_health": 3,
+    "events": {
+      "end_phase": [
+        {
+          "effects": [
+            {
+              "type": "damage",
+              "amount": {
+                "element": 2
+              }
+            }
+          ],
+          "limits": {}
+        }
+      ]
+    },
+    "element": "anemo"
+  },
+  "sacred_cryo_pearl": {
+    "name": "Sacred Cryo Pearl",
+    "max_health": 2,
+    "events": {
+      "end_phase": [
+        {
+          "effects": [
+            {
+              "type": "damage",
+              "amount": {
+                "element": 1
+              }
+            },
+            {
+              "type": "piercing_damage",
+              "amount": {
+                "true": 1
+              }
+            }
+          ],
+          "limits": {}
+        }
+      ]
+    },
+    "element": "anemo"
+  }
+}
