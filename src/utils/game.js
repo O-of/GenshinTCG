@@ -19,7 +19,11 @@ class GameBoard {
     for (let p of this.players) {
       p.drawCard(STARTING_ACTION_AMOUNT);
 
-      console.log(`Player ${p.playerNumber}: ${p.getActionCardsStr()}`);
+      console.log(
+        `Player ${
+          p.playerNumber
+        }: Your Action Cards are ${p.getActionCardsStr()}`
+      );
       let toRedraw = prompt("Enter cards to redraw: ")
         .split(",")
         .map((x) => parseInt(x))
@@ -27,35 +31,91 @@ class GameBoard {
       console.log(`Redrawing: ${toRedraw.join(",") || "None"}`);
 
       p.redrawCard(toRedraw);
-      console.log(`Player ${p.playerNumber}: ${p.getActionCardsStr()}\n`);
+      console.log(
+        `Player ${
+          p.playerNumber
+        }: Your Action Cards are ${p.getActionCardsStr()}\n`
+      );
     }
 
     let startingPlayer = 0;
     let turnNumber = 0;
 
-    let currentTurn = 1 - startingPlayer;
+    let currentTurn = 0;
     while (!this.players[0].lose && !this.players[1].lose) {
       if (this.players[0].ended && this.players[1].ended) {
         turnNumber++;
+        currentTurn = 1 - startingPlayer;
+
         console.log(`---------- TURN ${turnNumber} ----------`);
 
         for (let p of this.players) {
           p.startRollPhase();
           p.rollDice();
 
-          console.log(`Player ${p.playerNumber}: ${p.getDiceStr()}`);
+          console.log(`Player ${p.playerNumber}: Your Dice ${p.getDiceStr()}`);
           let toReroll = prompt("Enter dice to reroll: ")
             .split(",")
             .map((x) => parseInt(x))
             .filter((x) => x);
 
           console.log(`Rerolling: ${toReroll.join(",") || "None"}`);
-          console.log(`Player ${p.playerNumber}: ${p.getDiceStr()}\n`);
+          console.log(
+            `Player ${p.playerNumber}: Your Dice ${p.getDiceStr()}\n`
+          );
 
           p.rerollDice(toReroll);
         }
       } else {
         currentTurn = 1 - currentTurn;
+        let p = this.players[currentTurn];
+        p.drawCard(2);
+
+        while (true) {
+          console.log(
+            `Opponent Characters:\n${this.players[
+              1 - currentTurn
+            ].getCharacterStr()}\n\nYour Characters:\n${p.getCharacterStr()}\n`
+          );
+          console.log(`Your Dice: ${p.getDiceStr()}`);
+          console.log(`Your Action Cards: ${p.getActionCardsStr()}\n`);
+          console.log(
+            `Player ${currentTurn}, what to do: (1) Use Action Card (2) Tune Dice (3) Attack (4) Switch (5) end`
+          );
+
+          let action = parseInt(prompt("> "));
+
+          if (action === 1) {
+          } else if (action === 2) {
+          } else if (action === 3) {
+          } else if (action === 4) {
+            console.log(`Enter character to switch to\n${p.getCharacterStr()}`);
+            let cIndex = parseInt(prompt("> "));
+            if (!p.validToSwitch(cIndex)) {
+              console.log("Try again.");
+              continue;
+            }
+
+            console.log(`Enter dice to switch to: ${p.getDiceStr()}`);
+            let dIndex = parseInt(prompt("> "));
+
+            if (0 < dIndex && dIndex <= p.dice.length) {
+              p.switchCharacter(cIndex, dIndex);
+              break;
+            } else {
+              console.log("Try again.");
+            }
+          } else if (action === 5) {
+            console.log(this.players[1 - currentTurn].ended)
+            if (!this.players[1 - currentTurn].ended) {
+              startingPlayer = currentTurn;
+            }
+            p.endAttackPhase();
+            break;
+          } else {
+            console.log("Please try again");
+          }
+        }
       }
     }
   }
@@ -167,16 +227,39 @@ class Player {
   // Use action card
   useActionCard(index) {}
 
+  getCharacterStr() {
+    return `${this.primaryCards
+      .map(
+        (c, i) =>
+          `${i === this.activeCharacter ? "\x1b[1m" : ""}(${
+            i + 1
+          }) ${c.toString()}\x1b[0m`
+      )
+      .join("\n")}`;
+  }
+
   getActionCardsStr() {
-    return `Your Action cards are ${this.actionCards
+    return `${this.actionCards
       .map((card, i) => `(${i + 1}) ${card.cardInfo.name}`)
       .join(", ")}`;
   }
 
   getDiceStr() {
-    return `Your Dice are ${this.dice
-      .map((d, i) => `(${i + 1}) ${d}`)
-      .join(", ")}`;
+    return `${this.dice.map((d, i) => `(${i + 1}) ${d}`).join(", ")}`;
+  }
+
+  validToSwitch(characterIndex) {
+    return (
+      this.primaryCards[characterIndex - 1]?.hp > 0 &&
+      characterIndex !== this.activeCharacter
+    );
+  }
+
+  switchCharacter(characterIndex, diceIndex) {
+    if (this.validToSwitch(characterIndex) && 0 < diceIndex && diceIndex <= this.dice.length) {
+      this.activeCharacter = characterIndex - 1;
+      this.dice.splice(diceIndex - 1, 1);
+    }
   }
 }
 

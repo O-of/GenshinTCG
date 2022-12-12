@@ -5,6 +5,7 @@ const summons = require("../data/summons.json");
 
 class CharacterCard {
   constructor(name) {
+    this.name = name;
     this.characterData = characters[name];
 
     this.hp = 10;
@@ -12,6 +13,12 @@ class CharacterCard {
 
     this.weapon = null;
     this.artifact = null;
+  }
+
+  toString() {
+    return `${this.name} ${this.hp}/10 ${
+      this.element ? "(" + this.element + ") " : ""
+    }(Weapon: ${this.weapon || "None"} Artifact: ${this.artifact || "None"})`;
   }
 }
 
