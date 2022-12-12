@@ -1,4 +1,4 @@
- {
+{
   "name": "genshin-tcg",
   "version": "1.0.0",
   "description": "",
@@ -8,5 +8,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "prompt-sync": "^4.2.0"
+  }
 }
